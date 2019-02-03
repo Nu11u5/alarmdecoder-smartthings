@@ -114,6 +114,11 @@ preferences {
         input("zonetracker19zone", "number", title: "ZoneTracker Sensor #19", description: "Zone number to associate with this contact sensor.")
         input("zonetracker20zone", "number", title: "ZoneTracker Sensor #20", description: "Zone number to associate with this contact sensor.")
     }
+    
+    section() {
+    	input("lockproxy_mode", "enum", title: "Lock Proxy Arming Mode", description: "Use the alarm as a lock to arm or disarm the system", options: ["Disabled", "Arm (Stay)", "Arm (Away)"], defaultValue: "Disabled")
+    }
+    
 }
 
 metadata {
@@ -135,6 +140,16 @@ metadata {
         attribute "zoneStatus10", "string"
         attribute "zoneStatus11", "string"
         attribute "zoneStatus12", "string"
+
+		/*
+        Use a lock interface to allow other systems that do not support alarms to arm and disarm the alarm system
+        Functionality is disabled by default and configurable in the device settings
+        */
+		capability "Lock"
+        attribute "lockproxy_state", "string"
+        command "lock"
+        command "unlock"
+
 
         command "disarm"
         command "arm_stay"
@@ -365,6 +380,9 @@ def updated() {
 
     for (def i = 1; i <= 12; i++)
         sendEvent(name: "zoneStatus${i}", value: "", displayed: false)
+	
+    // lock proxy values
+    sendEvent(name: "lock", value: "unknown")
 
     // subscribe if settings change
     unschedule()
@@ -497,6 +515,8 @@ def refresh() {
     def urn = getDataValue("urn")
     def apikey = _get_api_key()
 
+	sendEvent(name: "lock", value: state.lock)
+
     return hub_http_get(urn, "/api/v1/alarmdecoder?apikey=${apikey}")
 }
 
@@ -582,6 +602,38 @@ def arm_stay() {
 
     return send_keys(keys)
 }
+
+
+/**
+ * lock()
+ * Proxies arming using a virtual lock capability
+ */
+def lock() {
+    if (settings.lockproxy_mode == "Arm (Stay)") {
+    	log.trace("--- lock (arm_stay)")
+        arm_stay()
+    }
+    else if (settings.lockproxy_mode == "Arm (Away)") {
+    	log.trace("--- lock (arm_away)")
+        arm_away()
+    }
+    else
+    	log.trace("--- lock (ignored)")
+}
+
+/**
+ * unlock()
+ * Proxies disarming using a virtual lock capability
+ */
+def unlock() {
+	if (settings.lockproxy_mode == "Arm (Stay)" || settings.lockproxy_mode == "Arm (Away)") {
+    	log.trace("--- unlock")
+        disarm()
+    }
+    else
+    	log.trace("--- unlock (ignored)")
+}
+
 
 /**
  * fire()
@@ -885,6 +937,20 @@ def update_state(data) {
         if (data.panel_armed_stay == true)
             alarm_status = "stay"
     }
+
+
+	// handle lock proxy update
+    if (armed) {
+    	if (data.panel_armed_stay == true && settings.lockproxy_mode == "Arm (Stay)")
+    		sendEvent(name: "lock", value: "locked")
+        else if (data.panel_armed_stay == false && settings.lockproxy_mode == "Arm (Away)")
+        	sendEvent(name: "lock", value: "locked")
+        else
+        	sendEvent(name: "lock", value: "unlocked")
+    }
+    else
+    	sendEvent(name: "lock", value: "unlocked")
+        
 
     // Create an event to notify Smart Home Monitor in our service.
     // "enum", ["off", "stay", "away"]
