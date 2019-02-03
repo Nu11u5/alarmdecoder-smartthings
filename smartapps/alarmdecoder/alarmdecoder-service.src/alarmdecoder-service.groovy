@@ -1124,7 +1124,7 @@ def addExistingDevices() {
             {
                 def nd = addChildDevice("alarmdecoder", "AlarmDecoder status indicator", "${state.ip}:${state.port}:bypass", state.hub,
                 [name: "${state.ip}:${state.port}:bypass", label: "${sname} Bypass", completedSetup: true])
-                nd.sendEvent(name: "contact", value: "close", isStateChange: true, displayed: false)
+                nd.sendEvent(name: "contact", value: "closed", isStateChange: true, displayed: false)
             }
 
             // Add virtual Ready contact if it does not exist.
@@ -1133,7 +1133,7 @@ def addExistingDevices() {
             {
                 def nd = addChildDevice("alarmdecoder", "AlarmDecoder status indicator", "${state.ip}:${state.port}:readyIndicator", state.hub,
                 [name: "${state.ip}:${state.port}:readyIndicator", label: "${sname} Ready", completedSetup: true])
-                nd.sendEvent(name: "contact", value: "close", isStateChange: true, displayed: false)
+                nd.sendEvent(name: "contact", value: "closed", isStateChange: true, displayed: false)
             }
 
             // Add virtual Alarm Bell contact if it does not exist.
@@ -1142,7 +1142,7 @@ def addExistingDevices() {
             {
                 def nd = addChildDevice("alarmdecoder", "AlarmDecoder status indicator", "${state.ip}:${state.port}:alarmBellIndicator", state.hub,
                 [name: "${state.ip}:${state.port}:alarmBellIndicator", label: "${sname} Alarm Bell", completedSetup: true])
-                nd.sendEvent(name: "contact", value: "close", isStateChange: true, displayed: false)
+                nd.sendEvent(name: "contact", value: "closed", isStateChange: true, displayed: false)
             }
 
             // Add FIRE alarm button if it does not exist.
@@ -1151,7 +1151,7 @@ def addExistingDevices() {
             {
                 def nd = addChildDevice("alarmdecoder", "AlarmDecoder action button indicator", "${state.ip}:${state.port}:alarmFire", state.hub,
                 [name: "${state.ip}:${state.port}:alarmFire", label: "${sname} Fire Alarm", completedSetup: true])
-                nd.sendEvent(name: "switch", value: "close", isStateChange: true, displayed: false)
+                nd.sendEvent(name: "switch", value: "closed", isStateChange: true, displayed: false)
             }
 
             // Add Panic alarm button if it does not exist.
@@ -1160,7 +1160,7 @@ def addExistingDevices() {
             {
                 def nd = addChildDevice("alarmdecoder", "AlarmDecoder action button indicator", "${state.ip}:${state.port}:alarmPanic", state.hub,
                 [name: "${state.ip}:${state.port}:alarmPanic", label: "${sname} Panic Alarm", completedSetup: true])
-                nd.sendEvent(name: "switch", value: "close", isStateChange: true, displayed: false)
+                nd.sendEvent(name: "switch", value: "closed", isStateChange: true, displayed: false)
             }
 
             // Add AUX alarm button if it does not exist.
@@ -1169,7 +1169,7 @@ def addExistingDevices() {
             {
                 def nd = addChildDevice("alarmdecoder", "AlarmDecoder action button indicator", "${state.ip}:${state.port}:alarmAUX", state.hub,
                 [name: "${state.ip}:${state.port}:alarmAUX", label: "${sname} AUX Alarm", completedSetup: true])
-                nd.sendEvent(name: "switch", value: "close", isStateChange: true, displayed: false)
+                nd.sendEvent(name: "switch", value: "closed", isStateChange: true, displayed: false)
             }
         }
     }

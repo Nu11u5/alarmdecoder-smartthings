@@ -708,7 +708,7 @@ def update_state(data) {
 
     // Update our ready indicator virtual device
     if (forceguiUpdate || data.panel_ready != state.panel_ready)
-        events << createEvent(name: "ready-set", value: data.panel_ready ? "close" : "open", displayed: true, isStateChange: true)
+        events << createEvent(name: "ready-set", value: data.panel_ready ? "closed" : "open", displayed: true, isStateChange: true)
 
     // Event Type 14 CID send raw data upstream if we find one
     if (data.eventid == 14) {
@@ -718,7 +718,7 @@ def update_state(data) {
     // Event Type 5 Bypass
     if (data.eventid == 5) {
         log.debug("bypass-set: ${data.panel_bypassed}")
-        events << createEvent(name: "bypass-set", value: data.panel_bypassed ? "open" : "close", displayed: true, isStateChange: true)
+        events << createEvent(name: "bypass-set", value: data.panel_bypassed ? "open" : "closed", displayed: true, isStateChange: true)
     }
 
     // Event Type 16 Chime
@@ -785,9 +785,9 @@ def update_state(data) {
         events << createEvent(name: "alarmStatus", value: alarm_status, displayed: true, isStateChange: true)
 
     // Update our alarming switch so SHM or others know we are in an alarm state. In alarm close contact.
-    // "enum", ["open", "close"]
+    // "enum", ["open", "closed"]
     if (forceguiUpdate || data.panel_alarming != state.panel_alarming)
-        events << createEvent(name: "alarmbell-set", value: data.panel_alarming ? "open" : "close", displayed: true, isStateChange: true)
+        events << createEvent(name: "alarmbell-set", value: data.panel_alarming ? "open" : "closed", displayed: true, isStateChange: true)
 
     // will only add events for zones that change state.
     def zone_events = build_zone_events(data)
