@@ -1284,6 +1284,7 @@ def zoneOn(evt) {
             sensorValue = "open"
 
         d.sendEvent(name: "contact", value: sensorValue, isStateChange: true, filtered: true)
+        d.sendEvent(name: "motion", value: "active", isStateChange: true, filtered: true)
     }
 }
 
@@ -1302,6 +1303,7 @@ def zoneOff(evt) {
             sensorValue = "closed"
 
         d.sendEvent(name: "contact", value: sensorValue, isStateChange: true, filtered: true)
+        d.sendEvent(name: "motion", value: "inactive", isStateChange: true, filtered: true)
     }
 }
 

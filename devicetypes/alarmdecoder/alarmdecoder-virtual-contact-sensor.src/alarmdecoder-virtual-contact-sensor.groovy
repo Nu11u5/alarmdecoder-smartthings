@@ -23,6 +23,7 @@ import groovy.transform.Field
 metadata {
     definition (name: "AlarmDecoder virtual contact sensor", namespace: APPNAMESPACE, author: "Nu Tech Software Solutions, Inc.") {
         capability "Contact Sensor"
+        capability "Motion Sensor"
     }
 
     // tile definitions
@@ -30,6 +31,10 @@ metadata {
         standardTile("sensor", "device.contact", width: 2, height: 2, canChangeIcon: true) {
             state "closed", label: '${name}', icon: "st.contact.contact.closed", backgroundColor: "#00a0dc"
             state "open", label: '${name}', icon: "st.contact.contact.open", backgroundColor: "#e86d13"
+        }
+        standardTile("motion", "device.motion", width: 2, height: 2, canChangeIcon: true) {
+            state "inactive", label: '${name}', icon: "st.motion.motion.inactive", backgroundColor: "#00a0dc"
+            state "active", label: '${name}', icon: "st.motion.motion.active", backgroundColor: "#e86d13"
         }
         main "sensor"
         details "sensor"
